@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Operiqa — Visuels IA pour mobilier</title>
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <link rel="manifest" href="site.webmanifest" />
+  <link rel="stylesheet" href="style.css" />
+  <script>if(localStorage.getItem('operiqa-theme')==='light')document.documentElement.classList.add('light');</script>
+</head>
+<body>
+  <div class="fixed-glow"></div>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <a href="#hero" class="nav-logo">OPERIQA</a>
+      <ul class="nav-links">
+        <li><a href="#services">Services</a></li>
+        <li><a href="#why">Approche</a></li>
+      </ul>
+      <button class="theme-toggle" id="themeToggle" title="Gece / Gündüz" aria-label="Gece / Gündüz modu">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
+      <a href="#contact" class="btn btn-primary">Nous contacter</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="container">
+      <h1 class="hero-title">
+        Des visuels et vidéos cinématiques<br />pour vos meubles — <span class="gradient-text">sans studio.</span>
+      </h1>
+      <p class="hero-sub">
+        Nous transformons vos photos produit sur fond blanc en visuels d'intérieur et vidéos dignes d'un shooting professionnel.
+      </p>
+      <div class="hero-ctas">
+        <a href="#contact" class="btn btn-primary">Nous contacter</a>
+        <a href="#services" class="btn btn-ghost">Voir nos services</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="services" id="services">
+    <div class="container">
+      <div class="services-head">
+        <p class="section-label">Ce que nous faisons</p>
+        <h2 class="section-title">Un seul domaine d'expertise :<br />mettre vos meubles en valeur visuellement.</h2>
+      </div>
+      <div class="cards-grid cards-grid-3">
+
+        <div class="card">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+            </svg>
+          </div>
+          <h3>Mise en scène d'intérieur</h3>
+          <p class="card-desc">À partir d'une simple photo produit, nous créons des visuels intégrés dans des intérieurs soigneusement conçus — contemporains, minimalistes ou éditoriaux.</p>
+          <p class="card-desc">Pensés pour valoriser vos produits sur vos campagnes, réseaux sociaux et fiches e-commerce.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/>
+            </svg>
+          </div>
+          <h3>Vidéos produit cinématiques</h3>
+          <p class="card-desc">Des vidéos courtes au rendu premium, avec des mouvements de caméra fluides et une direction visuelle pensée pour le digital.</p>
+          <p class="card-desc">Conçues pour les réseaux sociaux, les campagnes publicitaires et les pages produit.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
+            </svg>
+          </div>
+          <h3>Variations de style</h3>
+          <p class="card-desc">Un même produit, décliné dans plusieurs univers visuels pour enrichir votre communication sans multiplier les productions.</p>
+          <p class="card-desc">Idéal pour les collections saisonnières, les tests créatifs et les campagnes multi-formats.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- APPROCHE -->
+  <section id="why">
+    <div class="container">
+      <p class="section-label">Yaklaşımımız</p>
+
+      <div class="approach-hero">
+        <h2 class="approach-title">Bir mobilya markası için<br/>premium içerik üretmek<br/><span class="gradient-text">haftalar sürmemeli.</span></h2>
+        <p class="approach-sub">Basit bir ürün fotoğrafından, Operiqa yaşam tarzı görselleri ve sinematik videolar üretiyor.</p>
+      </div>
+
+      <div class="approach-sans">
+        <div class="sans-item">
+          <span class="sans-x">✕</span>
+          <span class="sans-text">Foto stüdyosu</span>
+        </div>
+        <div class="sans-item">
+          <span class="sans-x">✕</span>
+          <span class="sans-text">Ağır prodüksiyon</span>
+        </div>
+        <div class="sans-item">
+          <span class="sans-x">✕</span>
+          <span class="sans-text">Sonsuz teslim tarihleri</span>
+        </div>
+      </div>
+
+      <p class="approach-uses-label">İçeriğimiz şu amaçlarla tasarlanmıştır</p>
+      <div class="use-grid">
+
+        <div class="use-card">
+          <div class="use-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+            </svg>
+          </div>
+          <span class="use-label">Sosyal ağlar</span>
+        </div>
+
+        <div class="use-card">
+          <div class="use-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 11l19-9-9 19-2-8-8-2z"/>
+            </svg>
+          </div>
+          <span class="use-label">Reklam kampanyaları</span>
+        </div>
+
+        <div class="use-card">
+          <div class="use-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+            </svg>
+          </div>
+          <span class="use-label">Ürün sayfaları</span>
+        </div>
+
+        <div class="use-card">
+          <div class="use-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+            </svg>
+          </div>
+          <span class="use-label">Koleksiyon lansmanları</span>
+        </div>
+
+      </div>
+
+      <p class="approach-footer">Her proje, ürünlerinizi ve markanızın imajını öne çıkarmak için <strong>özel olarak hazırlanır.</strong></p>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="testimonials" id="temoignages">
+    <div class="container">
+      <div class="testimonials-head">
+        <p class="section-label">Performances prouvées</p>
+        <h2 class="section-title">Ce que disent nos clients.</h2>
+        <p class="section-sub">Des marques de mobilier qui ont transformé leur production de contenu.</p>
+      </div>
+      <div class="testi-grid">
+
+        <div class="testi-card">
+          <div class="stars">
+            <div class="star"></div><div class="star"></div><div class="star"></div>
+            <div class="star"></div><div class="star"></div>
+          </div>
+          <p class="testi-quote">"Grâce aux vidéos IA d'Operiqa, nous présentons nos meubles dans des intérieurs d'exception sans plateau photo. Le résultat est bluffant — nos clients ne font pas la différence avec un vrai shooting studio. Nos conversions ont augmenté de 55% en deux mois."</p>
+          <div class="testi-author">
+            <div class="testi-avatar">TR</div>
+            <div>
+              <div class="testi-name">Thomas R.</div>
+              <div class="testi-role">Fondateur, Showroom de mobilier</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testi-card">
+          <div class="stars">
+            <div class="star"></div><div class="star"></div><div class="star"></div>
+            <div class="star"></div><div class="star"></div>
+          </div>
+          <p class="testi-quote">"Operiqa a transformé notre catalogue produit. En quelques minutes, nos photos sur fond blanc deviennent des visuels cinématiques prêts à publier. Nous produisons du contenu premium chaque semaine sans budget photo ni équipe créative."</p>
+          <div class="testi-author">
+            <div class="testi-avatar">ML</div>
+            <div>
+              <div class="testi-name">Marie L.</div>
+              <div class="testi-role">Directrice, Boutique de décoration</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testi-card">
+          <div class="stars">
+            <div class="star"></div><div class="star"></div><div class="star"></div>
+            <div class="star"></div><div class="star"></div>
+          </div>
+          <p class="testi-quote">"Nous lancions une nouvelle collection et avions besoin de visuels en urgence. Operiqa a livré des rendus lifestyle complets en moins de 24h. La qualité était au niveau de nos shootings habituels."</p>
+          <div class="testi-author">
+            <div class="testi-avatar">SB</div>
+            <div>
+              <div class="testi-name">Sarah B.</div>
+              <div class="testi-role">Directrice, marque de mobilier haut de gamme</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testi-card">
+          <div class="stars">
+            <div class="star"></div><div class="star"></div><div class="star"></div>
+            <div class="star"></div><div class="star"></div>
+          </div>
+          <p class="testi-quote">"Notre catalogue fait 200 références. Operiqa nous permet de produire des visuels premium pour l'ensemble — quelque chose d'impossible avec un photographe traditionnel dans nos délais et notre budget."</p>
+          <div class="testi-author">
+            <div class="testi-avatar">JM</div>
+            <div>
+              <div class="testi-name">Julie M.</div>
+              <div class="testi-role">Responsable marketing, e-commerce home & living</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="cta-section" id="contact">
+    <div class="container">
+      <p class="section-label">Contact</p>
+      <h2 class="section-title">Parlons de votre projet.</h2>
+      <p class="section-sub" style="max-width:500px;margin:0 0 56px;">Partagez-nous votre catalogue, vos volumes et vos objectifs. Nous vous répondrons sous 24h avec une proposition adaptée à votre activité.</p>
+
+      <div class="contact-block">
+
+        <div class="contact-info">
+          <div class="contact-item">
+            <span class="contact-label">E-mail</span>
+            <div class="contact-email-row">
+              <span class="contact-email">davut@operiqa.com</span>
+              <button class="copy-btn" id="copyBtn" onclick="copyEmail()" title="Copier l'adresse e-mail">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-wa">
+          <a href="https://wa.me/33758867714" target="_blank" rel="noopener" class="btn-whatsapp-hero">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+            Nous écrire sur WhatsApp
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <span class="footer-logo">OPERIQA</span>
+          <span class="footer-tagline">Visuels et vidéos IA pour le mobilier.</span>
+        </div>
+        <div class="footer-links-grid">
+          <ul class="footer-links">
+            <li><a href="#services">Services</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span class="footer-copy">© 2026 Operiqa. Tous droits réservés.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Nav scroll behaviour — akıcı padding interpolasyonu
+    (function() {
+      var nav    = document.querySelector('nav');
+      var maxPad = 38;
+      var range  = 300;
+      var ticking = false;
+      window.addEventListener('scroll', function() {
+        if (!ticking) {
+          ticking = true;
+          requestAnimationFrame(function() {
+            var pad = Math.max(0, maxPad * (1 - window.scrollY / range));
+            nav.style.paddingTop = pad.toFixed(1) + 'px';
+            ticking = false;
+          });
+        }
+      }, { passive: true });
+    })();
+
+    // Always start at top on page load
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    window.scrollTo(0, 0);
+
+    // Scroll reveal: blur → sharp (tüm section'lar + metin elementleri)
+    (function() {
+      // Section-level reveal (hero hariç)
+      var sections = document.querySelectorAll('section:not(#hero)');
+      sections.forEach(function(s) { s.classList.add('section-reveal'); });
+
+      // Element-level reveal: section içindeki başlıklar, paragraflar, kartlar
+      var els = document.querySelectorAll(
+        'section:not(#hero) h2, section:not(#hero) h3, ' +
+        'section:not(#hero) p, section:not(#hero) li, ' +
+        'section:not(#hero) .card, section:not(#hero) .testi-card, ' +
+        'section:not(#hero) .why-block, section:not(#hero) .section-label'
+      );
+      els.forEach(function(el) { el.classList.add('el-reveal'); });
+
+      function makeObserver(options) {
+        return new IntersectionObserver(function(entries) {
+          entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('in-view');
+              this.unobserve(entry.target);
+            }
+          }.bind(this));
+        }, options);
+      }
+
+      var sectionObs = makeObserver({ rootMargin: '0px 0px -5% 0px', threshold: 0.05 });
+      var elObs      = makeObserver({ rootMargin: '0px 0px -8% 0px', threshold: 0.1 });
+
+      requestAnimationFrame(function() {
+        requestAnimationFrame(function() {
+          sections.forEach(function(s) { sectionObs.observe(s); });
+          els.forEach(function(el)     { elObs.observe(el); });
+        });
+      });
+    })();
+
+    // Active nav highlight on scroll
+    (function() {
+      var sectionMap = {
+        'hero':     { logo: true },
+        'services': { href: '#services' },
+        'why':      { href: '#why' },
+        'contact':  { href: '#contact', btn: true }
+      };
+
+      var navLogo = document.querySelector('.nav-logo');
+      var navBtn  = document.querySelector('nav .btn-primary');
+      var navAs   = document.querySelectorAll('.nav-links a');
+
+      function clearAll() {
+        navLogo.classList.remove('nav-active');
+        if (navBtn) navBtn.classList.remove('nav-active');
+        navAs.forEach(function(a) { a.classList.remove('nav-active'); });
+      }
+
+      function activate(id) {
+        clearAll();
+        var map = sectionMap[id];
+        if (!map) return;
+        if (map.logo) navLogo.classList.add('nav-active');
+        if (map.href) {
+          navAs.forEach(function(a) {
+            if (a.getAttribute('href') === map.href) a.classList.add('nav-active');
+          });
+        }
+        if (map.btn && navBtn) navBtn.classList.add('nav-active');
+      }
+
+      var sections = document.querySelectorAll('#hero, #services, #why, #contact');
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) activate(entry.target.id);
+        });
+      }, { rootMargin: '-15% 0px -70% 0px', threshold: 0 });
+
+      sections.forEach(function(s) { observer.observe(s); });
+    })();
+
+    // Theme toggle
+    (function() {
+      var btn = document.getElementById('themeToggle');
+      btn.addEventListener('click', function() {
+        var isLight = document.documentElement.classList.toggle('light');
+        localStorage.setItem('operiqa-theme', isLight ? 'light' : 'dark');
+      });
+    })();
+
+    function copyEmail() {
+      navigator.clipboard.writeText('davut@operiqa.com').then(function() {
+        var btn = document.getElementById('copyBtn');
+        btn.classList.add('copied');
+        setTimeout(function() { btn.classList.remove('copied'); }, 2000);
+      });
+    }
+
+  </script>
+
+</body>
+</html>

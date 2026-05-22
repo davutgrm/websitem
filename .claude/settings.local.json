@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(start *)",
+      "Bash(powershell.exe -Command \"Expand-Archive -Path 'favicon_io \\(2\\).zip' -DestinationPath 'favicon_io_2_extracted' -Force\")",
+      "Bash(git init *)",
+      "Bash(git remote *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git push *)"
+    ]
+  }
+}
