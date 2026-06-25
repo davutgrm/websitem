@@ -594,6 +594,7 @@ nav .btn-primary.nav-active {
   box-shadow: 0 0 18px rgba(168, 85, 247, 0.08), inset 0 0 12px rgba(168, 85, 247, 0.04);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  text-align: center;
 }
 
 
@@ -912,6 +913,7 @@ nav .btn-primary.nav-active {
   box-shadow: 0 0 18px rgba(168, 85, 247, 0.08), inset 0 0 12px rgba(168, 85, 247, 0.04);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  text-align: center;
 }
 
 .testi-card:hover {
@@ -1091,7 +1093,7 @@ nav .btn-primary.nav-active {
   flex-direction: row;
   gap: 48px;
   align-items: center;
-  text-align: left;
+  text-align: center;
   max-width: 900px;
 }
 
@@ -1495,6 +1497,10 @@ footer {
 .approach-footer strong {
   color: var(--text);
   font-weight: 700;
+}
+
+#why {
+  text-align: center;
 }
 
 @media (max-width: 900px) {
@@ -1958,13 +1964,13 @@ footer {
 .why-head,
 .hiw-head,
 .demo-section {
-  text-align: left;
+  text-align: center;
 }
 
 .hero-title,
 .hero-sub {
-  margin-left: 0;
-  margin-right: 0;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .hero-ctas,
@@ -1974,18 +1980,18 @@ footer {
 }
 
 .cta-section .section-title {
-  margin-left: 0;
-  margin-right: 0;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .section-sub {
-  margin-left: 0 !important;
-  margin-right: 0 !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
 }
 
 .why-block {
-  margin-left: 0;
-  margin-right: 0;
+  margin-left: auto;
+  margin-right: auto;
   max-width: 100%;
 }
 
@@ -2277,6 +2283,7 @@ html.light .fixed-glow {
 /* ── AVANT / APRÈS SECTION ───────────────────────────────────── */
 .aa-head {
   margin-bottom: 56px;
+  text-align: center;
 }
 
 .aa-grid {
@@ -2570,6 +2577,7 @@ html.light .fixed-glow {
 .aa-caption {
   padding: 16px 20px 20px;
   border-top: 1px solid var(--border-dim);
+  text-align: center;
 }
 
 .aa-caption-title {
