@@ -1101,6 +1101,7 @@ nav .btn-primary.nav-active {
   display: flex;
   flex-direction: column;
   gap: 28px;
+  align-items: center;
 }
 
 .contact-item {
@@ -1126,6 +1127,7 @@ nav .btn-primary.nav-active {
 .contact-email-row {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 10px;
 }
 
@@ -1976,7 +1978,7 @@ footer {
 .hero-ctas,
 .cta-buttons,
 .demo-ctas {
-  justify-content: flex-start;
+  justify-content: center;
 }
 
 .cta-section .section-title {
