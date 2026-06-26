@@ -2268,36 +2268,6 @@ footer {
   }
 }
 
-/* ── THEME TOGGLE BUTTON ──────────────────────────────────────── */
-.theme-toggle {
-  background: transparent;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-full);
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: var(--text-muted);
-  transition: background .2s, border-color .2s, color .2s, transform .15s;
-  flex-shrink: 0;
-}
-
-.theme-toggle:hover {
-  background: var(--blue-dim);
-  border-color: var(--blue-border);
-  color: var(--blue);
-  transform: scale(.95);
-}
-
-.theme-toggle svg {
-  width: 16px;
-  height: 16px;
-}
-
-html:not(.light) .icon-moon { display: none; }
-html.light      .icon-sun   { display: none; }
 
 /* ── LIGHT MODE ───────────────────────────────────────────────── */
 html.light {
