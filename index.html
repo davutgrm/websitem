@@ -419,23 +419,6 @@
   </footer>
 
   <script>
-    // Nav scroll behaviour — akıcı padding interpolasyonu
-    (function() {
-      var nav    = document.querySelector('nav');
-      var maxPad = 38;
-      var range  = 300;
-      var ticking = false;
-      window.addEventListener('scroll', function() {
-        if (!ticking) {
-          ticking = true;
-          requestAnimationFrame(function() {
-            var pad = Math.max(0, maxPad * (1 - window.scrollY / range));
-            nav.style.paddingTop = pad.toFixed(1) + 'px';
-            ticking = false;
-          });
-        }
-      }, { passive: true });
-    })();
 
     // Always start at top on page load
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';

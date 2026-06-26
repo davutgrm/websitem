@@ -193,6 +193,7 @@ body {
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 80px;
 }
 
 body {
@@ -258,12 +259,15 @@ section {
 
 /* ── NAV ──────────────────────────────────────────────────────── */
 nav {
-  position: sticky;
+  position: fixed;
   top: 0;
-  z-index: 100;
-  background: transparent;
-  padding-top: 38px;
-  will-change: padding-top;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: 12px 0;
 }
 
 .nav-inner {
@@ -489,7 +493,7 @@ nav .btn-primary.nav-active {
 
 /* ── HERO ─────────────────────────────────────────────────────── */
 .hero {
-  padding: 120px 0 96px;
+  padding: 160px 0 96px;
   text-align: center;
   position: relative;
   overflow: hidden;
