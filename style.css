@@ -358,6 +358,19 @@ nav .btn-primary.nav-active {
   box-shadow: 0 0 24px var(--blue-glow);
 }
 
+/* Mono — clean white/black */
+.btn-mono {
+  background: #ffffff;
+  color: #000000;
+  border: none;
+}
+
+.btn-mono:hover {
+  background: #e8e8e8;
+  transform: scale(.98);
+  box-shadow: 0 0 28px rgba(255, 255, 255, 0.12);
+}
+
 /* Ghost — outlined */
 .btn-ghost {
   background: transparent;
