@@ -917,6 +917,15 @@ nav .btn-primary.nav-active {
   font-weight: 500;
 }
 
+/* ── BENEFITS SECTION ────────────────────────────────────────────── */
+#avantages {
+  text-align: center;
+}
+
+.benefits-head {
+  margin-bottom: 48px;
+}
+
 /* ── TESTIMONIALS ─────────────────────────────────────────────── */
 .testimonials {
   background: var(--color-bg);
