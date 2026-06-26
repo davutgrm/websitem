@@ -2398,7 +2398,7 @@ html.light .fixed-glow {
 
 .aa-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 20px;
 }
 
@@ -2421,7 +2421,7 @@ html.light .fixed-glow {
 .aa-split {
   display: grid;
   grid-template-columns: 1fr 1px 1fr;
-  height: 180px;
+  height: 280px;
 }
 
 .aa-divider-line {
@@ -2461,9 +2461,6 @@ html.light .fixed-glow {
 /* Before side */
 .aa-before {
   background: #f2f0ee;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 /* Sofa shape */
