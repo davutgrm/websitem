@@ -20,7 +20,11 @@
       <a href="#hero" class="nav-logo">OPERIQA</a>
       <ul class="nav-links">
         <li><a href="#services">Services</a></li>
-        <li><a href="#why">Approche</a></li>
+        <li><a href="#approche">Approche</a></li>
+        <li><a href="#processus">Processus</a></li>
+        <li><a href="#avantages">Avantages</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#contact">Contact</a></li>
       </ul>
       <button class="theme-toggle" id="themeToggle" title="Clair / Sombre" aria-label="Mode clair / sombre">
         <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -102,7 +106,7 @@
   </section>
 
   <!-- COMMENT ÇA MARCHE -->
-  <section id="comment-ca-marche">
+  <section id="processus">
     <div class="container">
       <div class="hiw-head">
         <p class="section-label">Le processus</p>
@@ -131,7 +135,7 @@
   </section>
 
   <!-- APPROCHE -->
-  <section id="why">
+  <section id="approche">
     <div class="container">
       <p class="section-label">Notre approche</p>
 
@@ -477,10 +481,13 @@
     // Active nav highlight on scroll
     (function() {
       var sectionMap = {
-        'hero':     { logo: true },
-        'services': { href: '#services' },
-        'why':      { href: '#why' },
-        'contact':  { href: '#contact', btn: true }
+        'hero':      { logo: true },
+        'services':  { href: '#services' },
+        'approche':  { href: '#approche' },
+        'processus': { href: '#processus' },
+        'avantages': { href: '#avantages' },
+        'faq':       { href: '#faq' },
+        'contact':   { href: '#contact', btn: true }
       };
 
       var navLogo = document.querySelector('.nav-logo');
@@ -506,7 +513,7 @@
         if (map.btn && navBtn) navBtn.classList.add('nav-active');
       }
 
-      var sections = document.querySelectorAll('#hero, #services, #why, #contact');
+      var sections = document.querySelectorAll('#hero, #services, #approche, #processus, #avantages, #faq, #contact');
       var observer = new IntersectionObserver(function(entries) {
         entries.forEach(function(entry) {
           if (entry.isIntersecting) activate(entry.target.id);
