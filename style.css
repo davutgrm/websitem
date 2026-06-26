@@ -2328,8 +2328,12 @@ html.light p:hover,  html.light li:hover {
   color: #000000;
 }
 
+html.light nav {
+  background: rgba(255, 255, 255, 0.85);
+}
+
 html.light .nav-inner {
-  background: rgba(0, 0, 0, 0.05);
+  background: rgba(0, 0, 0, 0.04);
 }
 
 html.light .nav-links a.nav-active {
@@ -2412,8 +2416,7 @@ html.light .ba-sofa-staged {
 }
 
 html.light .fixed-glow {
-  mix-blend-mode: multiply;
-  opacity: 0.4;
+  opacity: 0;
 }
 
 /* ── AVANT / APRÈS SECTION ───────────────────────────────────── */
