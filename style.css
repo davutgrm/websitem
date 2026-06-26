@@ -260,12 +260,10 @@ section {
 nav {
   position: sticky;
   top: 0;
-  z-index: 1000;
+  z-index: 100;
   background: transparent;
   padding-top: 38px;
   will-change: padding-top;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
 }
 
 .nav-inner {
