@@ -1451,6 +1451,60 @@ footer {
   color: var(--text-muted);
 }
 
+.footer-contact {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.footer-contact-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--text-muted);
+  text-decoration: none;
+  padding: 10px 18px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.03);
+  transition: color .2s ease, border-color .2s ease, background .2s ease, box-shadow .2s ease;
+}
+
+.footer-contact-item svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  color: var(--color-primary-cta);
+}
+
+.footer-contact-item:hover {
+  color: var(--text);
+  border-color: rgba(168, 85, 247, 0.5);
+  background: rgba(139, 92, 246, 0.06);
+  box-shadow: 0 0 16px rgba(168, 85, 247, 0.12);
+}
+
+.footer-contact-sep {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--border);
+  flex-shrink: 0;
+}
+
+html.light .footer-contact-item {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+html.light .footer-contact-item:hover {
+  background: rgba(139, 92, 246, 0.05);
+}
+
 /* ── WHY OPERIQA ──────────────────────────────────────────────── */
 .why-block {
   max-width: 660px;
