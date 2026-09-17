@@ -1,536 +1,784 @@
 <!DOCTYPE html>
-<html lang="fr" class="light">
+<html lang="fr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Operiqa — Visuels IA pour mobilier</title>
+  <title>Operiqa — Fiches produit par QR code pour l'agroalimentaire et les biens de consommation</title>
+  <meta name="description" content="Operiqa crée et gère vos fiches produit numériques accessibles par QR code, pour l'agroalimentaire et les biens de consommation vendus en GMS. Composition, origine, allergènes, certifications, RSE — mises à jour en ligne en quelques secondes. Un service géré, vous n'avez rien à faire." />
+  <meta name="theme-color" content="#1F5D3F" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Operiqa" />
+  <meta property="og:locale" content="fr_FR" />
+  <meta property="og:title" content="Operiqa — Fiches produit par QR code pour l'agroalimentaire et les biens de consommation" />
+  <meta property="og:description" content="Toutes les informations de vos produits, accessibles d'un scan. Un service géré : nous créons vos fiches produit, générons les QR codes et gérons les mises à jour." />
+  <meta property="og:url" content="https://operiqa.com/" />
+  <!-- og:image à fournir (aucune image distante embarquée pour rester autonome) -->
+
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png" />
   <link rel="icon" type="image/x-icon" href="favicon.ico" />
   <link rel="manifest" href="site.webmanifest" />
-  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    /* ---------- Tokens ---------- */
+    :root {
+      --bg: #FAFAF8;
+      --surface: #FFFFFF;
+      --surface-2: #F4F2EC;
+      --ink: #141414;
+      --muted: #5B5B55;
+      --muted-2: #7A776F;
+      --border: #E7E5DE;
+      --border-strong: #D8D5CC;
+      --accent: #1F5D3F;
+      --accent-dark: #16472F;
+      --accent-tint: #EDF2EE;
+      --accent-tint-2: #E2EBE4;
+
+      --font-serif: Georgia, "Iowan Old Style", "Times New Roman", "Noto Serif", serif;
+      --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+      --maxw: 1120px;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --shadow: 0 1px 2px rgba(20,20,20,.04), 0 12px 32px -18px rgba(20,20,20,.18);
+    }
+
+    /* ---------- Reset ---------- */
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--font-sans);
+      font-size: 17px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+    img { max-width: 100%; display: block; }
+    h1, h2, h3 { font-family: var(--font-sans); font-weight: 800; line-height: 1.12; letter-spacing: -0.022em; margin: 0; }
+    p { margin: 0; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
+
+    /* ---------- Layout ---------- */
+    .wrap { width: 100%; max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+    section { padding: 84px 0; }
+    .eyebrow {
+      font-family: var(--font-sans);
+      font-size: 12.5px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--accent); margin: 0 0 16px;
+    }
+    .section-head { max-width: 62ch; margin-bottom: 44px; }
+    .section-head h2 { font-size: clamp(26px, 3.4vw, 38px); }
+    .section-head p { color: var(--muted); font-size: 18px; margin-top: 16px; }
+    .lede { color: var(--muted); }
+
+    /* Skip link */
+    .skip {
+      position: absolute; left: 16px; top: -60px; z-index: 1000;
+      background: var(--ink); color: #fff; padding: 10px 16px; border-radius: 8px;
+      transition: top .2s ease;
+    }
+    .skip:focus { top: 16px; text-decoration: none; }
+
+    /* ---------- Buttons ---------- */
+    .btn {
+      display: inline-flex; align-items: center; gap: 9px;
+      font-family: var(--font-sans); font-size: 15px; font-weight: 600;
+      padding: 13px 22px; border-radius: var(--radius-sm);
+      border: 1px solid transparent; cursor: pointer; transition: background .18s ease, border-color .18s ease, color .18s ease, transform .05s ease;
+      text-decoration: none; white-space: nowrap;
+    }
+    .btn:hover { text-decoration: none; }
+    .btn:active { transform: translateY(1px); }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: var(--accent-dark); color: #fff; }
+    .btn-ghost { background: transparent; color: var(--ink); border-color: var(--border-strong); }
+    .btn-ghost:hover { border-color: var(--ink); }
+    .btn svg { width: 16px; height: 16px; flex: none; }
+
+    /* ---------- Nav ---------- */
+    header.nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(250,250,248,.88);
+      backdrop-filter: saturate(140%) blur(8px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 66px; }
+    .brand { font-family: var(--font-sans); font-size: 22px; font-weight: 800; letter-spacing: -0.03em; color: var(--ink); }
+    .brand:hover { text-decoration: none; }
+    .brand b { color: inherit; font-weight: 800; }
+    .nav-links { display: flex; align-items: center; gap: 28px; list-style: none; margin: 0; padding: 0; }
+    .nav-links a { color: var(--muted); font-size: 15px; font-weight: 500; }
+    .nav-links a:hover { color: var(--ink); text-decoration: none; }
+    .nav-cta { display: flex; align-items: center; gap: 14px; }
+    .nav-toggle { display: none; }
+
+    @media (max-width: 900px) {
+      .nav-links { display: none; }
+      .nav-cta .btn span { display: none; }
+      .nav-cta .btn { padding: 11px 14px; }
+    }
+
+    /* ---------- Hero ---------- */
+    .hero { padding: 72px 0 64px; }
+    .hero-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 56px; align-items: center; }
+    .hero h1 { font-size: clamp(34px, 5vw, 54px); letter-spacing: -0.02em; }
+    .hero h1 .em { color: var(--accent); }
+    .hero-sub { color: var(--muted); font-size: 19px; margin-top: 22px; max-width: 46ch; }
+    .hero-sub strong { color: var(--ink); font-weight: 600; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 30px; align-items: center; }
+    .hero-note { display: flex; align-items: center; gap: 8px; margin-top: 22px; color: var(--muted-2); font-size: 14.5px; }
+    .hero-note svg { width: 17px; height: 17px; color: var(--accent); flex: none; }
+
+    /* ---------- Phone mockup ---------- */
+    .phone-stage { display: flex; justify-content: center; }
+    .phone {
+      width: 300px; background: #101311; border-radius: 40px; padding: 12px;
+      box-shadow: 0 40px 80px -40px rgba(20,20,20,.5), 0 8px 24px -12px rgba(20,20,20,.25);
+      position: relative;
+    }
+    .phone-screen { background: var(--surface); border-radius: 30px; overflow: hidden; position: relative; }
+    .phone-notch { position: absolute; top: 12px; left: 50%; transform: translateX(-50%); width: 92px; height: 22px; background: #101311; border-radius: 0 0 14px 14px; z-index: 3; }
+    .pf-status { display: flex; justify-content: space-between; align-items: center; padding: 10px 18px 6px; font-size: 11px; color: var(--muted); font-weight: 600; }
+    .pf-status .dots { display: flex; gap: 3px; }
+    .pf-status .dots i { width: 4px; height: 4px; border-radius: 50%; background: var(--muted-2); display: block; }
+
+    .pf-hero { padding: 6px 18px 16px; border-bottom: 1px solid var(--border); }
+    .pf-badge { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); background: var(--accent-tint); border: 1px solid var(--accent-tint-2); padding: 3px 9px; border-radius: 999px; }
+    .pf-title { font-family: var(--font-serif); font-size: 20px; font-weight: 700; margin-top: 12px; color: var(--ink); line-height: 1.15; }
+    .pf-sub { font-size: 12.5px; color: var(--muted); margin-top: 4px; }
+
+    .pf-body { padding: 6px 18px 16px; max-height: 300px; overflow: hidden; }
+    .pf-block { padding: 13px 0; border-bottom: 1px solid var(--border); }
+    .pf-block:last-child { border-bottom: 0; }
+    .pf-block h4 { display: flex; align-items: center; gap: 8px; font-family: var(--font-sans); font-size: 11px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--muted-2); margin: 0 0 7px; }
+    .pf-block h4 svg { width: 14px; height: 14px; color: var(--accent); flex: none; }
+    .pf-block p { font-size: 12.5px; color: var(--ink); line-height: 1.5; }
+    .pf-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .pf-tag { font-size: 11px; font-weight: 600; color: var(--accent-dark); background: var(--accent-tint); border-radius: 6px; padding: 4px 9px; }
+    .pf-nutri { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+    .pf-nutri div { background: var(--surface-2); border-radius: 8px; padding: 8px 6px; text-align: center; }
+    .pf-nutri b { display: block; font-family: var(--font-serif); font-size: 15px; color: var(--ink); }
+    .pf-nutri span { font-size: 9.5px; color: var(--muted-2); text-transform: uppercase; letter-spacing: .04em; }
+
+    .pf-foot { display: flex; align-items: center; gap: 12px; padding: 12px 18px; background: var(--surface-2); border-top: 1px solid var(--border); }
+    .pf-foot .qr { flex: none; }
+    .pf-foot-txt { font-size: 10.5px; color: var(--muted); line-height: 1.4; }
+    .pf-foot-txt b { color: var(--ink); font-weight: 600; }
+    .pf-fade { position: absolute; left: 0; right: 0; bottom: 62px; height: 46px; background: linear-gradient(to bottom, rgba(255,255,255,0), var(--surface)); pointer-events: none; }
+
+    /* ---------- Problem ---------- */
+    .problem { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .pcard { padding: 4px 0; }
+    .pcard .pico { width: 44px; height: 44px; border-radius: 10px; background: var(--accent-tint); display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+    .pcard .pico svg { width: 22px; height: 22px; color: var(--accent); }
+    .pcard h3 { font-size: 20px; margin-bottom: 8px; }
+    .pcard p { color: var(--muted); font-size: 16px; }
+
+    /* ---------- Steps ---------- */
+    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .step { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; position: relative; }
+    .step-num { font-family: var(--font-sans); font-size: 15px; font-weight: 700; color: #fff; background: var(--accent); width: 34px; height: 34px; border-radius: 999px; display: flex; align-items: center; justify-content: center; margin-bottom: 18px; }
+    .step h3 { font-size: 20px; margin-bottom: 10px; }
+    .step p { color: var(--muted); font-size: 15.5px; }
+    .step p em { color: var(--ink); font-style: normal; font-weight: 600; }
+
+    .reassure {
+      margin-top: 28px; display: flex; align-items: flex-start; gap: 14px;
+      background: var(--accent-tint); border: 1px solid var(--accent-tint-2); border-radius: var(--radius);
+      padding: 20px 22px; color: var(--accent-dark); font-size: 16px;
+    }
+    .reassure svg { width: 22px; height: 22px; flex: none; color: var(--accent); margin-top: 1px; }
+    .reassure strong { color: var(--accent-dark); }
+
+    /* ---------- Contents (anatomy) ---------- */
+    .contents { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .anatomy { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px 40px; }
+    .arow { display: flex; gap: 16px; padding: 20px 0; border-bottom: 1px solid var(--border); }
+    .arow .aico { width: 40px; height: 40px; border-radius: 9px; background: var(--surface-2); display: flex; align-items: center; justify-content: center; flex: none; }
+    .arow .aico svg { width: 20px; height: 20px; color: var(--accent); }
+    .arow h3 { font-size: 17px; margin-bottom: 3px; font-family: var(--font-sans); font-weight: 700; letter-spacing: 0; }
+    .arow p { font-size: 14.5px; color: var(--muted); }
+
+    /* ---------- 2027 context ---------- */
+    .ctx { background: var(--ink); color: #fff; }
+    .ctx .eyebrow { color: #86C7A2; }
+    .ctx .section-head h2 { color: #fff; }
+    .ctx .section-head p { color: #C9C7C0; }
+    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; margin: 8px 0 40px; }
+    .stat { border-top: 2px solid var(--accent); padding-top: 18px; }
+    .stat .big { font-family: var(--font-sans); font-size: clamp(38px, 6vw, 56px); font-weight: 800; letter-spacing: -0.03em; line-height: 1; color: #fff; }
+    .stat .lbl { color: #C9C7C0; font-size: 15px; margin-top: 10px; }
+    .stat .src { color: #8C8A83; font-size: 12.5px; margin-top: 8px; }
+
+    .ctx-points { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px 32px; margin-bottom: 36px; }
+    .ctx-point { display: flex; gap: 12px; }
+    .ctx-point svg { width: 20px; height: 20px; color: #86C7A2; flex: none; margin-top: 3px; }
+    .ctx-point p { color: #E6E5E0; font-size: 15.5px; }
+    .ctx-point p b { color: #fff; font-weight: 600; }
+
+    .honesty {
+      display: flex; gap: 16px; align-items: flex-start;
+      background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.14);
+      border-left: 3px solid #86C7A2; border-radius: var(--radius); padding: 22px 24px;
+    }
+    .honesty svg { width: 22px; height: 22px; color: #86C7A2; flex: none; margin-top: 2px; }
+    .honesty h3 { font-family: var(--font-sans); font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 6px; letter-spacing: 0; }
+    .honesty p { color: #C9C7C0; font-size: 15px; }
+    .honesty p + p { margin-top: 8px; }
+    .honesty strong { color: #fff; }
+
+    /* ---------- Why Operiqa ---------- */
+    .why-grid { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 56px; align-items: start; }
+    .why-list { list-style: none; margin: 0; padding: 0; }
+    .why-list li { display: flex; gap: 16px; padding: 18px 0; border-bottom: 1px solid var(--border); }
+    .why-list li:last-child { border-bottom: 0; }
+    .why-list .wico { width: 40px; height: 40px; border-radius: 9px; background: var(--accent-tint); display: flex; align-items: center; justify-content: center; flex: none; }
+    .why-list .wico svg { width: 20px; height: 20px; color: var(--accent); }
+    .why-list h3 { font-size: 18px; margin-bottom: 4px; font-family: var(--font-sans); font-weight: 700; letter-spacing: 0; }
+    .why-list p { color: var(--muted); font-size: 15.5px; }
+    .why-aside {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 32px; box-shadow: var(--shadow);
+    }
+    .why-aside .q { font-family: var(--font-sans); font-weight: 800; font-size: 23px; line-height: 1.32; letter-spacing: -0.02em; color: var(--ink); }
+    .why-aside .q .em { color: var(--accent); }
+    .why-aside hr { border: 0; border-top: 1px solid var(--border); margin: 24px 0; }
+    .why-aside .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .why-aside .compare h4 { font-family: var(--font-sans); font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted-2); margin: 0 0 10px; font-weight: 700; }
+    .why-aside .compare ul { list-style: none; margin: 0; padding: 0; }
+    .why-aside .compare li { font-size: 14px; color: var(--muted); padding: 4px 0 4px 20px; position: relative; }
+    .why-aside .compare li::before { content: ""; position: absolute; left: 2px; top: 10px; width: 8px; height: 8px; border-radius: 50%; }
+    .why-aside .compare .them li::before { background: var(--border-strong); }
+    .why-aside .compare .us li { color: var(--ink); }
+    .why-aside .compare .us li::before { background: var(--accent); }
+
+    /* ---------- FAQ ---------- */
+    .faq { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .faq-list { max-width: 800px; }
+    details.qa { border-bottom: 1px solid var(--border); }
+    details.qa summary {
+      list-style: none; cursor: pointer; padding: 22px 44px 22px 0; position: relative;
+      font-family: var(--font-sans); font-size: 19px; font-weight: 700; letter-spacing: -0.01em; color: var(--ink); line-height: 1.3;
+    }
+    details.qa summary::-webkit-details-marker { display: none; }
+    details.qa summary::after {
+      content: ""; position: absolute; right: 6px; top: 27px; width: 13px; height: 13px;
+      border-right: 2px solid var(--accent); border-bottom: 2px solid var(--accent);
+      transform: rotate(45deg); transition: transform .2s ease;
+    }
+    details.qa[open] summary::after { transform: rotate(-135deg); top: 32px; }
+    details.qa .a { padding: 0 44px 24px 0; color: var(--muted); font-size: 16.5px; }
+    details.qa .a p + p { margin-top: 12px; }
+    details.qa .a strong { color: var(--ink); font-weight: 600; }
+
+    /* ---------- Contact ---------- */
+    .contact-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 56px; align-items: center; }
+    .contact h2 { font-size: clamp(28px, 3.6vw, 40px); }
+    .contact .lede { font-size: 18px; margin-top: 18px; max-width: 46ch; }
+    .contact-actions { margin-top: 28px; display: flex; flex-wrap: wrap; gap: 14px; }
+    .contact-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 30px; box-shadow: var(--shadow); }
+    .contact-card .who { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; }
+    .contact-card .avatar { width: 48px; height: 48px; border-radius: 50%; background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center; font-family: var(--font-sans); font-size: 18px; font-weight: 700; letter-spacing: -0.01em; flex: none; }
+    .contact-card .who b { display: block; font-size: 17px; color: var(--ink); }
+    .contact-card .who span { font-size: 14px; color: var(--muted); }
+    .contact-line { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-top: 1px solid var(--border); font-size: 16px; }
+    .contact-line svg { width: 19px; height: 19px; color: var(--accent); flex: none; }
+    .contact-line a { color: var(--ink); font-weight: 500; }
+    .contact-line a:hover { color: var(--accent); }
+
+    /* ---------- Footer ---------- */
+    footer.site { background: var(--ink); color: #C9C7C0; padding: 56px 0 40px; }
+    .foot-grid { display: flex; justify-content: space-between; align-items: flex-start; gap: 40px; flex-wrap: wrap; }
+    .foot-brand { font-family: var(--font-sans); font-size: 24px; font-weight: 800; color: #fff; letter-spacing: -0.03em; }
+    .foot-brand b { color: inherit; }
+    .foot-tag { color: #9B9992; font-size: 15px; margin-top: 10px; max-width: 34ch; }
+    .foot-col h4 { font-size: 12px; text-transform: uppercase; letter-spacing: .1em; color: #86C7A2; margin: 0 0 14px; font-weight: 700; }
+    .foot-col a, .foot-col p { display: block; color: #C9C7C0; font-size: 15px; margin-bottom: 9px; }
+    .foot-col a:hover { color: #fff; }
+    .foot-bottom { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; margin-top: 44px; padding-top: 22px; border-top: 1px solid rgba(255,255,255,.12); color: #86847D; font-size: 13.5px; }
+    .foot-bottom a { color: #86847D; }
+    .foot-bottom a:hover { color: #fff; }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width: 900px) {
+      section { padding: 60px 0; }
+      .hero-grid { grid-template-columns: 1fr; gap: 44px; }
+      .hero { padding: 48px 0 40px; }
+      .grid-3, .steps, .anatomy, .stats, .ctx-points { grid-template-columns: 1fr; }
+      .why-grid, .contact-grid { grid-template-columns: 1fr; gap: 36px; }
+      .anatomy { gap: 0; }
+      .phone-stage { order: -1; }
+    }
+    @media (max-width: 560px) {
+      body { font-size: 16px; }
+      .wrap { padding: 0 18px; }
+      .why-aside .compare { grid-template-columns: 1fr; }
+      .foot-grid { flex-direction: column; gap: 28px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      * { transition: none !important; }
+    }
+  </style>
 </head>
 <body>
+  <a class="skip" href="#main">Aller au contenu</a>
 
-  <!-- NAV -->
-  <nav>
-    <div class="nav-inner">
-      <a href="#hero" class="nav-logo">OPERIQA</a>
-      <ul class="nav-links">
-        <li><a href="#services">Services</a></li>
-        <li><a href="#processus">Processus</a></li>
-        <li><a href="#approche">Approche</a></li>
-        <li><a href="#avantages">Avantages</a></li>
-        <li><a href="#faq">FAQ</a></li>
-        <li><a href="#contact">Contact</a></li>
-        <li class="lang-switch">
-          <span style="font-weight:700;color:var(--text);">FR</span>
-          <span style="color:var(--text-muted);"> | </span>
-          <a href="index-tr.html">TR</a>
-        </li>
-      </ul>
-      <a href="#contact" class="btn btn-primary">Nous contacter</a>
-    </div>
-  </nav>
-
-  <!-- HERO -->
-  <section class="hero" id="hero">
-    <div class="fixed-glow"></div>
-    <div class="container">
-      <h1 class="hero-title">
-        Des visuels et vidéos cinématiques<br />pour vos meubles — <span class="gradient-text">sans studio.</span>
-      </h1>
-      <p class="hero-sub">
-        Nous transformons vos photos produit sur fond blanc en visuels d'intérieur et vidéos dignes d'un shooting professionnel.
-      </p>
-      <div class="hero-ctas">
-        <a href="#contact" class="btn btn-primary">Nous contacter</a>
-        <a href="#services" class="btn btn-ghost">Voir nos services</a>
+  <!-- ============ NAV ============ -->
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <a class="brand" href="#top" aria-label="Operiqa, accueil">Oper<b>iqa</b></a>
+      <nav aria-label="Navigation principale">
+        <ul class="nav-links">
+          <li><a href="#probleme">Le problème</a></li>
+          <li><a href="#etapes">Comment ça marche</a></li>
+          <li><a href="#fiche">La fiche</a></li>
+          <li><a href="#contexte">2027</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </nav>
+      <div class="nav-cta">
+        <a class="btn btn-primary" href="#contact">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          <span>Demander un exemple gratuit</span>
+        </a>
       </div>
     </div>
-  </section>
+  </header>
 
-  <!-- SERVICES -->
-  <section class="services" id="services">
-    <div class="container">
-      <div class="services-head">
-        <p class="section-label">Ce que nous faisons</p>
-        <h2 class="section-title">Un seul domaine d'expertise :<br />créer des visuels et vidéos pour vos produits automatiquement.</h2>
-        <p class="services-tagline">Sans studio. Sans agence. Sans délais.</p>
-      </div>
-      <div class="cards-grid cards-grid-3">
+  <main id="main">
+    <span id="top"></span>
 
-        <div class="card">
-          <span class="card-badge">Généré en quelques minutes</span>
-          <div class="card-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
-            </svg>
+    <!-- ============ HERO ============ -->
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">Fiches produit numériques par QR code</p>
+          <h1>Toutes les informations de vos produits, <span class="em">accessibles d'un scan.</span></h1>
+          <p class="hero-sub">
+            Un QR code imprimé à côté de votre code-barres ouvre une fiche produit complète, mobile et multilingue.
+            Le contenu se met à jour en ligne en quelques secondes — le code, lui, reste identique.
+            <strong>Vous n'avez rien à faire : nous créons et gérons tout.</strong>
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#contact">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              Demander un exemple gratuit
+            </a>
+            <a class="btn btn-ghost" href="#etapes">Voir comment ça marche</a>
           </div>
-          <h3>Mise en scène d'intérieur</h3>
-          <p class="card-desc">À partir d'une simple photo produit, nous créons grâce à notre IA des visuels intégrés dans des intérieurs soigneusement conçus — contemporains, minimalistes ou éditoriaux.</p>
-          <p class="card-desc">Pensés pour valoriser vos produits sur vos campagnes, réseaux sociaux et fiches produit.</p>
+          <p class="hero-note">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+            Nous créons une fiche d'exemple avec l'un de vos produits, sans engagement.
+          </p>
         </div>
 
-        <div class="card">
-          <span class="card-badge">Généré en quelques minutes</span>
-          <div class="card-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/>
-            </svg>
-          </div>
-          <h3>Vidéos produit cinématiques</h3>
-          <p class="card-desc">Des vidéos courtes au rendu premium, avec des mouvements de caméra fluides et une direction visuelle pensée pour le digital.</p>
-          <p class="card-desc">Conçues pour les réseaux sociaux, les campagnes publicitaires et les pages produit.</p>
-        </div>
-
-        <div class="card">
-          <span class="card-badge">Généré en quelques minutes</span>
-          <div class="card-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
-            </svg>
-          </div>
-          <h3>Variations de style</h3>
-          <p class="card-desc">Un même produit, décliné dans plusieurs univers visuels pour enrichir votre communication sans multiplier les productions.</p>
-          <p class="card-desc">Idéal pour les collections saisonnières, les tests créatifs et les campagnes multi-formats.</p>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- COMMENT ÇA MARCHE -->
-  <section id="processus">
-    <div class="container">
-      <div class="hiw-head">
-        <p class="section-label">Le processus</p>
-        <h2 class="section-title">Comment ça marche ?</h2>
-      </div>
-      <div class="steps-grid">
-        <div class="step">
-          <div class="step-num">01</div>
-          <h3 class="step-title">Envoyez votre photo</h3>
-          <p class="step-desc">Partagez-nous vos photos produit — aucun studio ni équipement spécial requis. Une simple photo suffit.</p>
-        </div>
-        <div class="step-divider"></div>
-        <div class="step">
-          <div class="step-num">02</div>
-          <h3 class="step-title">Notre IA crée la scène</h3>
-          <p class="step-desc">Notre intelligence artificielle intègre vos meubles dans des intérieurs professionnels : lumière, ambiance, cadrage — tout est pensé pour sublimer votre produit.</p>
-        </div>
-        <div class="step-divider"></div>
-        <div class="step">
-          <div class="step-num">03</div>
-          <h3 class="step-title">Recevez vos visuels</h3>
-          <p class="step-desc">Visuels haute résolution et vidéos cinématiques générés en quelques minutes, prêts à publier sur vos réseaux, fiches produit et campagnes publicitaires.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- APPROCHE -->
-  <section id="approche">
-    <div class="container">
-      <p class="section-label">Notre approche</p>
-
-      <div class="approach-hero">
-        <h2 class="approach-title">Produire du contenu premium<br/>pour une marque de mobilier<br/><span class="gradient-text">ne devrait pas prendre des semaines.</span></h2>
-        <p class="approach-sub">À partir d'une simple photo produit, Operiqa génère des visuels lifestyle et des vidéos cinématiques.</p>
-      </div>
-
-      <div class="approach-sans">
-        <div class="sans-item">
-          <span class="sans-x">✕</span>
-          <span class="sans-text">Studio photo</span>
-        </div>
-        <div class="sans-item">
-          <span class="sans-x">✕</span>
-          <span class="sans-text">Production lourde</span>
-        </div>
-        <div class="sans-item">
-          <span class="sans-x">✕</span>
-          <span class="sans-text">Délais interminables</span>
-        </div>
-      </div>
-
-      <p class="approach-uses-label">Nos contenus sont conçus pour</p>
-      <div class="use-grid">
-
-        <div class="use-card">
-          <div class="use-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
-            </svg>
-          </div>
-          <span class="use-label">Réseaux sociaux</span>
-        </div>
-
-        <div class="use-card">
-          <div class="use-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M3 11l19-9-9 19-2-8-8-2z"/>
-            </svg>
-          </div>
-          <span class="use-label">Campagnes publicitaires</span>
-        </div>
-
-        <div class="use-card">
-          <div class="use-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
-            </svg>
-          </div>
-          <span class="use-label">Fiches produit</span>
-        </div>
-
-        <div class="use-card">
-          <div class="use-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-            </svg>
-          </div>
-          <span class="use-label">Lancements de collection</span>
-        </div>
-
-      </div>
-
-      <p class="approach-footer">Chaque visuel est généré automatiquement pour mettre en valeur vos produits et <strong>l'image de votre marque.</strong></p>
-    </div>
-  </section>
-
-  <!-- BENEFITS -->
-  <section id="avantages">
-    <div class="container">
-      <div class="benefits-head">
-        <p class="section-label">Les avantages</p>
-        <h2 class="section-title">Pourquoi choisir Operiqa ?</h2>
-        <p class="section-sub">Ce que vous gagnez en automatisant votre production de contenu visuel.</p>
-      </div>
-      <div class="cards-grid">
-
-        <div class="card">
-          <h3>Gain de temps</h3>
-          <p class="card-desc">Vos visuels et vidéos sont générés en quelques minutes, sans attendre un studio ou une agence.</p>
-        </div>
-
-        <div class="card">
-          <h3>Réduction des coûts</h3>
-          <p class="card-desc">Supprimez les frais d'agence et de shooting photo pour chaque nouveau produit.</p>
-        </div>
-
-        <div class="card">
-          <h3>Plus de contenu</h3>
-          <p class="card-desc">Produisez plusieurs déclinaisons visuelles d'un même produit sans effort supplémentaire.</p>
-        </div>
-
-        <div class="card">
-          <h3>Cohérence visuelle</h3>
-          <p class="card-desc">Un rendu professionnel et homogène sur tous vos canaux de communication.</p>
-        </div>
-
-        <div class="card">
-          <h3>Réactivité</h3>
-          <p class="card-desc">Lancez une nouvelle collection ou une campagne sans délais de production.</p>
-        </div>
-
-        <div class="card">
-          <h3>Simplicité</h3>
-          <p class="card-desc">Une simple photo produit suffit. Aucune compétence technique requise.</p>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- TESTIMONIALS -->
-  <section class="testimonials" id="temoignages">
-    <div class="container">
-      <div class="testimonials-head">
-        <p class="section-label">Performances prouvées</p>
-        <h2 class="section-title">Ce que disent nos clients.</h2>
-        <p class="section-sub">Des marques de mobilier qui ont transformé leur production de contenu.</p>
-      </div>
-      <div class="testi-grid">
-
-        <div class="testi-card">
-          <div class="stars">
-            <div class="star"></div><div class="star"></div><div class="star"></div>
-            <div class="star"></div><div class="star"></div>
-          </div>
-          <p class="testi-quote">"Avant Operiqa, chaque lancement de collection nécessitait de réserver un studio trois semaines à l'avance — avec un budget dépassant 4 000 € par session. Aujourd'hui, nous envoyons nos photos produit le lundi matin et recevons des visuels lifestyle professionnels le lendemain. Nous avons constaté une hausse de 34 % de notre taux de conversion e-commerce en moins de deux mois, et nos clients nous disent régulièrement qu'ils se projettent beaucoup mieux dans l'espace."</p>
-          <div class="testi-author">
-            <div class="testi-avatar">TR</div>
-            <div>
-              <div class="testi-name">Thomas Rousseau</div>
-              <div class="testi-role">Directeur — Maison Rousseau Mobilier, Lyon</div>
+        <!-- Phone mockup (démo visuelle, HTML/CSS pur) -->
+        <div class="phone-stage">
+          <div class="phone" role="img" aria-label="Aperçu d'une fiche produit Operiqa affichée sur mobile : produit d'exemple « Confiture d'abricots », avec composition, origine, valeurs nutritionnelles, allergènes et certifications.">
+            <div class="phone-notch" aria-hidden="true"></div>
+            <div class="phone-screen">
+              <div class="pf-status" aria-hidden="true">
+                <span>9:41</span>
+                <span class="dots"><i></i><i></i><i></i></span>
+              </div>
+              <div class="pf-hero">
+                <span class="pf-badge">Fiche d'exemple</span>
+                <div class="pf-title">Confiture d'abricots</div>
+                <div class="pf-sub">Pot 340 g · Récolte 2026</div>
+              </div>
+              <div class="pf-body" aria-hidden="true">
+                <div class="pf-block">
+                  <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg>Composition</h4>
+                  <p>Abricots 62 %, sucre de canne, jus de citron, pectine de fruits.</p>
+                </div>
+                <div class="pf-block">
+                  <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5.2-7-11a7 7 0 0 1 14 0c0 5.8-7 11-7 11Z"/><circle cx="12" cy="10" r="2.4"/></svg>Origine</h4>
+                  <p>Abricots récoltés dans la vallée du Rhône, France.</p>
+                </div>
+                <div class="pf-block">
+                  <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>Nutrition (pour 100 g)</h4>
+                  <div class="pf-nutri">
+                    <div><b>226</b><span>kcal</span></div>
+                    <div><b>54 g</b><span>Glucides</span></div>
+                    <div><b>0,4 g</b><span>Protéines</span></div>
+                  </div>
+                </div>
+                <div class="pf-block">
+                  <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 2.4 18a2 2 0 0 0 1.7 3h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>Allergènes</h4>
+                  <p>Peut contenir des traces de fruits à coque.</p>
+                </div>
+                <div class="pf-block">
+                  <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 12 2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>Certifications</h4>
+                  <div class="pf-tags"><span class="pf-tag">Sans conservateur</span><span class="pf-tag">Origine France</span></div>
+                </div>
+              </div>
+              <div class="pf-fade" aria-hidden="true"></div>
+              <div class="pf-foot">
+                <span class="qr" aria-hidden="true">
+                  <!-- QR décoratif (non scannable) -->
+                  <svg width="44" height="44" viewBox="0 0 33 33" shape-rendering="crispEdges" role="presentation">
+                    <rect width="33" height="33" fill="#fff"/>
+                    <path fill="#141414" d="M0 0h7v7H0zM2 2v3h3V2zM26 0h7v7h-7zM28 2v3h3V2zM0 26h7v7H0zM2 28v3h3v-3z"/>
+                    <path fill="#141414" d="M9 0h1v1H9zM11 0h1v3h-1zM13 0h2v1h-2zM16 1h1v2h-1zM18 0h1v1h-1zM20 0h2v1h-2zM23 0h1v2h-1zM9 2h1v1H9zM14 2h1v2h-1zM21 2h1v1h-1zM9 4h2v1H9zM12 4h1v1h-1zM17 4h2v1h-2zM22 4h2v1h-2zM0 9h1v1H0zM2 9h3v1H2zM6 9h1v2H6zM9 9h1v1H9zM11 9h2v1h-2zM15 9h1v3h-1zM17 9h1v1h-1zM20 9h1v2h-1zM24 9h2v1h-2zM28 9h1v1h-1zM31 9h2v1h-2zM3 11h1v1H3zM9 11h1v2H9zM12 11h2v1h-2zM18 11h1v1h-1zM23 11h1v2h-1zM26 11h1v1h-1zM29 11h2v1h-2zM0 13h2v1H0zM4 13h2v1H4zM11 13h1v1h-1zM14 13h2v1h-2zM17 13h1v2h-1zM21 13h2v1h-2zM25 13h1v1h-1zM28 13h1v2h-1zM31 13h1v1h-1zM7 15h1v2H7zM10 15h2v1h-2zM13 15h1v1h-1zM19 15h2v1h-2zM24 15h1v2h-1zM27 15h1v1h-1zM31 15h1v2h-1zM2 17h2v1H2zM9 17h1v1H9zM12 17h1v2h-1zM15 17h2v1h-2zM20 17h1v1h-1zM22 17h2v1h-2zM29 17h1v1h-1zM0 19h1v2H0zM4 19h1v1H4zM6 19h2v1H6zM10 19h1v1h-1zM14 19h1v2h-1zM17 19h2v1h-2zM25 19h1v2h-1zM28 19h2v1h-2zM3 21h1v1H3zM8 21h1v1H8zM11 21h2v1h-2zM16 21h1v1h-1zM19 21h1v2h-1zM22 21h1v1h-1zM30 21h2v1h-2zM9 23h1v1H9zM13 23h2v1h-2zM17 23h1v1h-1zM21 23h2v1h-2zM26 23h1v2h-1zM29 23h1v1h-1zM31 23h1v1h-1z"/>
+                    <path fill="#141414" d="M9 26h1v1H9zM11 26h2v1h-2zM15 26h1v3h-1zM18 26h1v1h-1zM21 26h1v2h-1zM24 26h2v1h-2zM28 26h1v2h-1zM31 26h2v1h-2zM9 28h2v3H9zM13 28h1v1h-1zM18 28h2v1h-2zM23 28h1v2h-1zM26 28h1v1h-1zM30 28h1v2h-1zM12 30h2v1h-2zM16 30h2v1h-2zM19 30h1v1h-1zM21 30h1v1h-1zM25 30h2v1h-2zM28 30h1v1h-1zM32 30h1v1h-1z"/>
+                  </svg>
+                </span>
+                <span class="pf-foot-txt">Scannée depuis l'emballage.<br /><b>Mise à jour le 12 sept. 2026.</b></span>
+              </div>
             </div>
           </div>
         </div>
+      </div>
+    </section>
 
-        <div class="testi-card">
-          <div class="stars">
-            <div class="star"></div><div class="star"></div><div class="star"></div>
-            <div class="star"></div><div class="star"></div>
+    <!-- ============ PROBLÈME ============ -->
+    <section class="problem" id="probleme">
+      <div class="wrap">
+        <div class="section-head">
+          <p class="eyebrow">Le problème</p>
+          <h2>Sur un emballage, il n'y a jamais assez de place.</h2>
+          <p>Composition, origine, certifications, allergènes, engagements RSE — tout ne rentre pas. Et la moindre correction impose une réimpression.</p>
+        </div>
+        <div class="grid-3">
+          <div class="pcard">
+            <div class="pico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9h6M7 13h4"/></svg></div>
+            <h3>Un espace saturé</h3>
+            <p>Les mentions obligatoires occupent déjà l'emballage. Impossible d'y ajouter l'origine détaillée, vos certifications ou vos engagements.</p>
           </div>
-          <p class="testi-quote">"Notre catalogue compte 180 références, et nous manquions de visuels lifestyle pour la quasi-totalité de nos produits. Avec Operiqa, nous produisons plusieurs déclinaisons par référence — salon, chambre, bureau — sans mobiliser de studio. Le résultat est immédiat : nos clients passent 40 % de temps en plus sur nos fiches produit, et notre taux de retour a diminué parce qu'ils visualisent mieux le meuble dans leur propre intérieur."</p>
-          <div class="testi-author">
-            <div class="testi-avatar">ML</div>
+          <div class="pcard">
+            <div class="pico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M8 12h8"/></svg></div>
+            <h3>Chaque correction coûte cher</h3>
+            <p>Une recette qui évolue, une norme qui change : il faut refaire les plaques d'impression et écouler les anciens stocks avant de corriger.</p>
+          </div>
+          <div class="pcard">
+            <div class="pico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/><path d="M11 8v3M11 14h.01"/></svg></div>
+            <h3>Le consommateur en veut plus</h3>
+            <p>64 % des consommateurs veulent plus d'informations sur l'origine des produits. L'emballage seul ne peut plus y répondre.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ÉTAPES ============ -->
+    <section id="etapes">
+      <div class="wrap">
+        <div class="section-head">
+          <p class="eyebrow">Comment ça marche</p>
+          <h2>Trois étapes. Et de votre côté, presque rien.</h2>
+          <p>Operiqa est un service géré, pas un logiciel à apprendre. Vous fournissez vos documents, nous nous occupons du reste.</p>
+        </div>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <h3>Vous envoyez vos fiches techniques</h3>
+            <p>Les documents que vous avez déjà : compositions, valeurs nutritionnelles, origines, certifications. <em>Aucune saisie de votre part.</em></p>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <h3>Nous créons la fiche et le QR code</h3>
+            <p>Nos équipes conçoivent la fiche produit complète, mobile et multilingue, et génèrent le QR code associé. <em>Vous validez avant toute publication.</em></p>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <h3>Le QR rejoint votre emballage</h3>
+            <p>Il s'ajoute à votre fichier d'impression et apparaît au prochain tirage, à côté du code-barres. <em>Ensuite, les mises à jour se font en ligne.</em></p>
+          </div>
+        </div>
+        <div class="reassure">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 12a3 3 0 1 0 6 0 3 3 0 0 0-6 0Z"/><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/></svg>
+          <p><strong>Les données viennent toujours de vous.</strong> Operiqa n'invente aucune information : nous mettons en forme ce que vous nous transmettez, et vous validez chaque fiche avant sa mise en ligne.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CONTENU DE LA FICHE ============ -->
+    <section class="contents" id="fiche">
+      <div class="wrap">
+        <div class="section-head">
+          <p class="eyebrow">La fiche produit</p>
+          <h2>Tout ce que l'emballage ne peut pas dire.</h2>
+          <p>Une page mobile-first, claire et complète, que le consommateur ouvre d'un simple scan — dans sa langue.</p>
+        </div>
+        <div class="anatomy">
+          <div class="arow">
+            <div class="aico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg></div>
+            <div><h3>Composition détaillée</h3><p>La liste complète des ingrédients, sans les contraintes de place de l'étiquette.</p></div>
+          </div>
+          <div class="arow">
+            <div class="aico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-5.2-7-11a7 7 0 0 1 14 0c0 5.8-7 11-7 11Z"/><circle cx="12" cy="10" r="2.4"/></svg></div>
+            <div><h3>Origine des ingrédients</h3><p>La provenance et le parcours du produit, pour répondre à la demande de transparence.</p></div>
+          </div>
+          <div class="arow">
+            <div class="aico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 2.4 18a2 2 0 0 0 1.7 3h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg></div>
+            <div><h3>Allergènes</h3><p>Une information mise en avant, lisible, mise à jour dès qu'une recette évolue.</p></div>
+          </div>
+          <div class="arow">
+            <div class="aico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></div>
+            <div><h3>Valeurs nutritionnelles</h3><p>Le tableau complet, présenté clairement sur mobile.</p></div>
+          </div>
+          <div class="arow">
+            <div class="aico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 12 2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg></div>
+            <div><h3>Certifications & labels</h3><p>Bio, origine, cahiers des charges : vos preuves, présentées comme il se doit.</p></div>
+          </div>
+          <div class="arow">
+            <div class="aico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v6M5 8l7 4 7-4M5 8v8l7 4 7-4V8"/></svg></div>
+            <div><h3>Engagements RSE</h3><p>Emballage, filières, démarche environnementale : la place de raconter ce que vous faites.</p></div>
+          </div>
+          <div class="arow">
+            <div class="aico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18 15 15 0 0 1 0-18Z"/></svg></div>
+            <div><h3>Multilingue</h3><p>La même fiche, adaptée à chaque marché, sans réimprimer l'emballage.</p></div>
+          </div>
+          <div class="arow">
+            <div class="aico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9"/><path d="M3 4v5h5"/><path d="M12 8v4l3 2"/></svg></div>
+            <div><h3>Toujours à jour</h3><p>Un changement ? La fiche est corrigée en ligne en quelques secondes. Le QR reste identique.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CONTEXTE 2027 ============ -->
+    <section class="ctx" id="contexte">
+      <div class="wrap">
+        <div class="section-head">
+          <p class="eyebrow">Le mouvement est lancé</p>
+          <h2>Le rayon bascule vers le QR code. Autant y prendre votre place maintenant.</h2>
+          <p>Ce n'est pas une contrainte de plus : c'est une transition de fond, pilotée par l'organisme mondial des codes-barres. Les marques qui s'y mettent tôt prennent de l'avance.</p>
+        </div>
+
+        <div class="stats">
+          <div class="stat">
+            <div class="big">2027</div>
+            <div class="lbl">L'échéance visée par GS1 pour que le nouveau QR code remplace le code-barres classique sur les emballages.</div>
+            <div class="src">Transition pilotée par GS1, soutenue par Carrefour et d'autres enseignes.</div>
+          </div>
+          <div class="stat">
+            <div class="big">96 %</div>
+            <div class="lbl">des entreprises considèrent la traçabilité comme prioritaire… mais 90 % ne savent pas par où commencer.</div>
+            <div class="src">Sondage GS1 France, juillet 2026.</div>
+          </div>
+          <div class="stat">
+            <div class="big">64 %</div>
+            <div class="lbl">des consommateurs veulent plus d'informations sur l'origine des produits qu'ils achètent.</div>
+            <div class="src">Attente confirmée côté consommateurs.</div>
+          </div>
+        </div>
+
+        <div class="ctx-points">
+          <div class="ctx-point">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+            <p><b>GS1, l'organisme mondial des codes-barres, pilote la transition.</b> Le passage au nouveau QR code est déjà engagé, avec une échéance fixée à fin 2027.</p>
+          </div>
+          <div class="ctx-point">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+            <p><b>Carrefour et d'autres grandes enseignes le soutiennent déjà.</b> La demande viendra aussi de la distribution, pas seulement des marques.</p>
+          </div>
+          <div class="ctx-point">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+            <p><b>Tout le rayon est concerné.</b> Les marques qui s'y mettent tôt prennent de l'avance ; les autres suivront dans l'urgence, au dernier moment.</p>
+          </div>
+          <div class="ctx-point">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+            <p><b>Un signe de modernité, pas une corvée.</b> Le QR code affiche une transparence assumée — un atout d'image autant qu'un outil pratique.</p>
+          </div>
+        </div>
+
+        <div class="honesty">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/></svg>
+          <div>
+            <h3>Soyons clairs : ce n'est pas une obligation légale — ni pour l'agroalimentaire, ni pour les autres biens de consommation.</h3>
+            <p>Le Passeport Produit Numérique (règlement européen ESPR) <strong>exclut le secteur alimentaire</strong>. Et pour les autres produits de grande consommation, rien ne vous l'impose à ce stade : ni l'État ni l'Union européenne ne vous obligent à ce QR code aujourd'hui.</p>
+            <p>Notre positionnement est simple et honnête : <strong>le rayon bascule vers le QR code, et cette transition est déjà engagée.</strong> S'y préparer maintenant, sereinement, vaut mieux que d'y être contraint dans l'urgence.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ POURQUOI OPERIQA ============ -->
+    <section id="pourquoi">
+      <div class="wrap">
+        <div class="section-head">
+          <p class="eyebrow">Pourquoi Operiqa</p>
+          <h2>Un service géré, pas un logiciel de plus.</h2>
+          <p>La plupart des solutions vous laissent tout faire vous-même. Nous faisons l'inverse : le travail est de notre côté.</p>
+        </div>
+        <div class="why-grid">
+          <ul class="why-list">
+            <li>
+              <div class="wico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 10h18M8 21h8"/></svg></div>
+              <div><h3>Aucun logiciel à apprendre</h3><p>Pas d'interface à maîtriser, pas de compte à gérer. Vous nous parlez, nous exécutons.</p></div>
+            </li>
+            <li>
+              <div class="wico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></div>
+              <div><h3>Aucune saisie de données</h3><p>Vous envoyez vos fiches techniques telles quelles. La mise en forme, c'est notre métier.</p></div>
+            </li>
+            <li>
+              <div class="wico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></svg></div>
+              <div><h3>Vous gardez la main</h3><p>Rien n'est publié sans votre validation. Les données restent les vôtres, toujours.</p></div>
+            </li>
+            <li>
+              <div class="wico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9"/><path d="M3 4v5h5"/><path d="M12 8v4l3 2"/></svg></div>
+              <div><h3>Les mises à jour, on s'en charge</h3><p>Un changement de recette, une nouvelle certification ? Dites-le-nous, la fiche est corrigée.</p></div>
+            </li>
+          </ul>
+          <aside class="why-aside">
+            <p class="q">« Le client ne fait rien. Il nous envoie ses fiches, <span class="em">nous faisons le reste.</span> »</p>
+            <hr />
+            <div class="compare">
+              <div>
+                <h4>Un outil self-service</h4>
+                <ul class="them">
+                  <li>Vous saisissez tout</li>
+                  <li>Vous apprenez le logiciel</li>
+                  <li>Vous maintenez les fiches</li>
+                  <li>Vous gérez les langues</li>
+                </ul>
+              </div>
+              <div>
+                <h4>Operiqa</h4>
+                <ul class="us">
+                  <li>Vous envoyez vos documents</li>
+                  <li>Rien à installer</li>
+                  <li>Nous mettons à jour</li>
+                  <li>Multilingue inclus</li>
+                </ul>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FAQ ============ -->
+    <section class="faq" id="faq">
+      <div class="wrap">
+        <div class="section-head">
+          <p class="eyebrow">Questions fréquentes</p>
+          <h2>Ce qu'un dirigeant nous demande.</h2>
+        </div>
+        <div class="faq-list">
+          <details class="qa">
+            <summary>Est-ce obligatoire&nbsp;?</summary>
+            <div class="a">
+              <p><strong>Non — ni pour l'agroalimentaire, ni pour les autres biens de consommation à ce stade.</strong> Le Passeport Produit Numérique européen (ESPR) exclut le secteur alimentaire ; et pour les autres produits de grande consommation, aucune réglementation ne vous impose ce QR code aujourd'hui.</p>
+              <p>En revanche, le rayon bascule : GS1 pilote le passage au nouveau QR code d'ici fin 2027, soutenu par Carrefour et d'autres enseignes. S'y préparer maintenant, c'est prendre de l'avance plutôt que de subir la transition.</p>
+            </div>
+          </details>
+          <details class="qa">
+            <summary>Qui fournit les informations produit&nbsp;?</summary>
+            <div class="a">
+              <p><strong>Vous.</strong> Vous nous transmettez vos fiches techniques existantes. Operiqa ne crée et n'invente aucune donnée : nous mettons en forme ce que vous nous fournissez, et <strong>vous validez chaque fiche avant sa publication</strong>.</p>
+            </div>
+          </details>
+          <details class="qa">
+            <summary>Faut-il changer nos emballages&nbsp;?</summary>
+            <div class="a">
+              <p><strong>Non.</strong> Le QR code s'ajoute simplement à votre fichier d'impression existant, à côté du code-barres. Il apparaît au prochain tirage, sans refonte de votre packaging.</p>
+            </div>
+          </details>
+          <details class="qa">
+            <summary>Que se passe-t-il si une information change&nbsp;?</summary>
+            <div class="a">
+              <p><strong>La fiche est mise à jour en ligne en quelques secondes</strong>, et le QR code reste identique. Plus besoin de réimprimer l'emballage pour corriger une information.</p>
+            </div>
+          </details>
+          <details class="qa">
+            <summary>Combien de temps pour la mise en place&nbsp;?</summary>
+            <div class="a">
+              <p>Dès réception de vos fiches techniques, nous vous remettons rapidement une première fiche produit et son QR code, que vous validez avant toute publication. <strong>Le QR rejoint ensuite votre prochain tirage d'emballage.</strong></p>
+              <p><em>[À préciser : délai indicatif exact selon le volume de références — dites-nous combien de produits et nous vous donnons un calendrier.]</em></p>
+            </div>
+          </details>
+          <details class="qa">
+            <summary>Qui gère la maintenance&nbsp;?</summary>
+            <div class="a">
+              <p><strong>Operiqa.</strong> C'est un service géré de bout en bout : hébergement des fiches, mises à jour, ajout de langues, corrections. Vous n'avez aucune infrastructure à maintenir.</p>
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CONTACT ============ -->
+    <section class="contact" id="contact">
+      <div class="wrap contact-grid">
+        <div>
+          <p class="eyebrow">Passons à la pratique</p>
+          <h2>Demandez un exemple gratuit avec un de vos produits.</h2>
+          <p class="lede">Envoyez-nous la fiche technique d'une de vos références. Nous créons la fiche produit et son QR code, pour que vous voyiez concrètement le résultat — sans engagement.</p>
+          <div class="contact-actions">
+            <a class="btn btn-primary" href="mailto:davut@operiqa.com?subject=Exemple%20gratuit%20de%20fiche%20produit%20Operiqa&body=Bonjour%20Davut%2C%0A%0AJe%20souhaite%20un%20exemple%20gratuit%20de%20fiche%20produit%20pour%20l%27un%20de%20nos%20produits.%0A%0AEntreprise%20%3A%20%0AProduit%20concern%C3%A9%20%3A%20%0A%0AMerci%20%21">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+              Écrire à Operiqa
+            </a>
+            <a class="btn btn-ghost" href="tel:+33758867714">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.4-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2Z"/></svg>
+              07 58 86 77 14
+            </a>
+          </div>
+        </div>
+        <div class="contact-card">
+          <div class="who">
+            <div class="avatar" aria-hidden="true">DS</div>
             <div>
-              <div class="testi-name">Marie Lemaire</div>
-              <div class="testi-role">Directrice — Atelier Lemaire Décoration, Bordeaux</div>
+              <b>Davut Senol</b>
+              <span>Operiqa</span>
             </div>
           </div>
-        </div>
-
-        <div class="testi-card">
-          <div class="stars">
-            <div class="star"></div><div class="star"></div><div class="star"></div>
-            <div class="star"></div><div class="star"></div>
+          <div class="contact-line">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+            <a href="mailto:davut@operiqa.com">davut@operiqa.com</a>
           </div>
-          <p class="testi-quote">"Nous avons lancé une nouvelle collection de fauteuils avec une fenêtre de communication de seulement dix jours. Operiqa nous a livré 12 produits déclinés en 3 ambiances chacun en 18 heures. Le rendu était indiscernable d'un vrai shooting d'intérieur. Notre campagne Instagram a généré 41 % d'engagement supplémentaire par rapport à nos lancements précédents — un résultat que nous n'avions jamais atteint avec du contenu studio classique."</p>
-          <div class="testi-author">
-            <div class="testi-avatar">SB</div>
-            <div>
-              <div class="testi-name">Sarah Bernheim</div>
-              <div class="testi-role">Directrice artistique — Studio Bernheim, Paris</div>
-            </div>
+          <div class="contact-line">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.4-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2Z"/></svg>
+            <a href="tel:+33758867714">07 58 86 77 14</a>
           </div>
         </div>
-
-        <div class="testi-card">
-          <div class="stars">
-            <div class="star"></div><div class="star"></div><div class="star"></div>
-            <div class="star"></div><div class="star"></div>
-          </div>
-          <p class="testi-quote">"Nous testions régulièrement différentes mises en scène saisonnières — ambiance été, hiver, scandinave, industriel — ce qui représentait plusieurs shootings par an et un budget conséquent. Avec Operiqa, nous déclinons un même produit dans cinq univers visuels pour le coût d'un seul visuel traditionnel. Nos coûts de production ont baissé de 60 %, et nos ventes en ligne ont progressé de 22 % sur la période de test."</p>
-          <div class="testi-author">
-            <div class="testi-avatar">JM</div>
-            <div>
-              <div class="testi-name">Julie Marchand</div>
-              <div class="testi-role">Responsable marketing — Habitat & Co, Nantes</div>
-            </div>
-          </div>
-        </div>
-
       </div>
-    </div>
-  </section>
+    </section>
+  </main>
 
-  <!-- FAQ -->
-  <section id="faq">
-    <div class="container">
-      <div class="faq-head">
-        <p class="section-label">FAQ</p>
-        <h2 class="section-title">Questions fréquentes</h2>
-      </div>
-      <div class="faq-list">
-
-        <div class="faq-item">
-          <button class="faq-question" aria-expanded="false">
-            <span>Quels types de contenus peut-on créer avec Operiqa ?</span>
-            <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-          </button>
-          <div class="faq-answer"><p>Des visuels lifestyle, des photos d'ambiance et des vidéos cinématiques générés automatiquement à partir de vos photos produits.</p></div>
+  <!-- ============ FOOTER ============ -->
+  <footer class="site">
+    <div class="wrap">
+      <div class="foot-grid">
+        <div>
+          <div class="foot-brand">Oper<b>iqa</b></div>
+          <p class="foot-tag">Fiches produit numériques par QR code, créées et gérées pour vous. Pour les industriels de l'agroalimentaire et des biens de consommation.</p>
         </div>
-
-        <div class="faq-item">
-          <button class="faq-question" aria-expanded="false">
-            <span>Combien de temps faut-il pour obtenir les premiers résultats ?</span>
-            <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-          </button>
-          <div class="faq-answer"><p>Les premiers visuels et vidéos sont générés en quelques minutes après l'envoi de vos photos produits.</p></div>
+        <div class="foot-col">
+          <h4>Contact</h4>
+          <p>Davut Senol</p>
+          <a href="mailto:davut@operiqa.com">davut@operiqa.com</a>
+          <a href="tel:+33758867714">07 58 86 77 14</a>
         </div>
-
-        <div class="faq-item">
-          <button class="faq-question" aria-expanded="false">
-            <span>Ai-je besoin d'un équipement spécial pour utiliser Operiqa ?</span>
-            <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-          </button>
-          <div class="faq-answer"><p>Non, une simple photo produit sur fond blanc suffit. Aucun équipement spécial n'est requis.</p></div>
-        </div>
-
-        <div class="faq-item">
-          <button class="faq-question" aria-expanded="false">
-            <span>Puis-je tester avant de m'engager ?</span>
-            <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-          </button>
-          <div class="faq-answer"><p>Oui, nous proposons un échange de 10 minutes pour évaluer vos besoins avant tout engagement.</p></div>
-        </div>
-
-        <div class="faq-item">
-          <button class="faq-question" aria-expanded="false">
-            <span>Avec quels types d'entreprises travaillez-vous ?</span>
-            <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-          </button>
-          <div class="faq-answer"><p>Nous travaillons principalement avec des marques de mobilier souhaitant produire du contenu visuel sans studio ni agence.</p></div>
-        </div>
-
-        <div class="faq-item">
-          <button class="faq-question" aria-expanded="false">
-            <span>Quel type de support proposez-vous après la mise en place ?</span>
-            <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-          </button>
-          <div class="faq-answer"><p>Nous restons disponibles par email pour toute question après la mise en place.</p></div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- CONTACT -->
-  <section class="cta-section" id="contact">
-    <div class="container">
-      <p class="section-label">Contact</p>
-      <h2 class="section-title">Parlons de votre projet.</h2>
-      <p class="section-sub" style="max-width:500px;margin:0 auto 40px;">Partagez-nous votre catalogue, vos volumes et vos objectifs. Nous vous répondrons en quelques minutes avec une proposition adaptée à votre activité.</p>
-
-      <a href="https://cal.com/davut-senol/echange-10-minutes" target="_blank" rel="noopener" class="btn btn-mono btn-lg">
-        Réserver un échange de 10 minutes
-      </a>
-      <p style="margin-top: 14px; font-size: 13px; color: var(--text-muted); letter-spacing: 0.02em;">Entièrement gratuit, sans engagement.</p>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer>
-    <div class="container">
-      <div class="footer-top">
-        <div class="footer-brand">
-          <span class="footer-logo">OPERIQA</span>
-          <span class="footer-tagline">Visuels et vidéos IA pour le mobilier.</span>
-        </div>
-        <div class="footer-contact">
-          <a href="tel:+330758867714" class="footer-contact-item">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.6a16 16 0 0 0 6 6l.96-.96a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/>
-            </svg>
-            <span>+33 07 58 86 77 14</span>
-          </a>
-          <span class="footer-contact-sep"></span>
-          <a href="mailto:davut@operiqa.com" class="footer-contact-item">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
-            </svg>
-            <span>davut@operiqa.com</span>
-          </a>
+        <div class="foot-col">
+          <h4>Le site</h4>
+          <a href="#probleme">Le problème</a>
+          <a href="#etapes">Comment ça marche</a>
+          <a href="#fiche">La fiche produit</a>
+          <a href="#contexte">Le contexte 2027</a>
+          <a href="#faq">FAQ</a>
         </div>
       </div>
-      <div class="footer-bottom">
-        <span class="footer-copy">© 2026 Operiqa. Tous droits réservés.</span>
+      <div class="foot-bottom">
+        <span>© 2026 Operiqa. Tous droits réservés.</span>
+        <span><a href="#top">Retour en haut ↑</a></span>
       </div>
     </div>
   </footer>
-
-  <script>
-
-    // Always start at top on page load
-    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-    window.scrollTo(0, 0);
-
-    // Scroll reveal: blur → sharp (tüm section'lar + metin elementleri)
-    (function() {
-      // Section-level reveal (hero hariç)
-      var sections = document.querySelectorAll('section:not(#hero)');
-      sections.forEach(function(s) { s.classList.add('section-reveal'); });
-
-      // Element-level reveal: section içindeki başlıklar, paragraflar, kartlar
-      var els = document.querySelectorAll(
-        'section:not(#hero) h2, section:not(#hero) h3, ' +
-        'section:not(#hero) p, section:not(#hero) li, ' +
-        'section:not(#hero) .card, section:not(#hero) .testi-card, ' +
-        'section:not(#hero) .why-block, section:not(#hero) .section-label'
-      );
-      els.forEach(function(el) { el.classList.add('el-reveal'); });
-
-      function makeObserver(options) {
-        return new IntersectionObserver(function(entries) {
-          entries.forEach(function(entry) {
-            if (entry.isIntersecting) {
-              entry.target.classList.add('in-view');
-              this.unobserve(entry.target);
-            }
-          }.bind(this));
-        }, options);
-      }
-
-      var sectionObs = makeObserver({ rootMargin: '0px 0px -5% 0px', threshold: 0.05 });
-      var elObs      = makeObserver({ rootMargin: '0px 0px -8% 0px', threshold: 0.1 });
-
-      requestAnimationFrame(function() {
-        requestAnimationFrame(function() {
-          sections.forEach(function(s) { sectionObs.observe(s); });
-          els.forEach(function(el)     { elObs.observe(el); });
-        });
-      });
-    })();
-
-    // Active nav highlight on scroll
-    (function() {
-      var sectionMap = {
-        'hero':      { logo: true },
-        'services':  { href: '#services' },
-        'approche':  { href: '#approche' },
-        'processus': { href: '#processus' },
-        'avantages': { href: '#avantages' },
-        'faq':       { href: '#faq' },
-        'contact':   { href: '#contact', btn: true }
-      };
-
-      var navLogo = document.querySelector('.nav-logo');
-      var navBtn  = document.querySelector('nav .btn-primary');
-      var navAs   = document.querySelectorAll('.nav-links a');
-
-      function clearAll() {
-        navLogo.classList.remove('nav-active');
-        if (navBtn) navBtn.classList.remove('nav-active');
-        navAs.forEach(function(a) { a.classList.remove('nav-active'); });
-      }
-
-      function activate(id) {
-        clearAll();
-        var map = sectionMap[id];
-        if (!map) return;
-        if (map.logo) navLogo.classList.add('nav-active');
-        if (map.href) {
-          navAs.forEach(function(a) {
-            if (a.getAttribute('href') === map.href) a.classList.add('nav-active');
-          });
-        }
-        if (map.btn && navBtn) navBtn.classList.add('nav-active');
-      }
-
-      var sections = document.querySelectorAll('#hero, #services, #approche, #processus, #avantages, #faq, #contact');
-      var observer = new IntersectionObserver(function(entries) {
-        entries.forEach(function(entry) {
-          if (entry.isIntersecting) activate(entry.target.id);
-        });
-      }, { rootMargin: '-15% 0px -70% 0px', threshold: 0 });
-
-      sections.forEach(function(s) { observer.observe(s); });
-    })();
-
-    // FAQ accordion
-    (function() {
-      document.querySelectorAll('.faq-question').forEach(function(btn) {
-        btn.addEventListener('click', function() {
-          var item = btn.closest('.faq-item');
-          var isOpen = item.classList.contains('open');
-          document.querySelectorAll('.faq-item').forEach(function(i) {
-            i.classList.remove('open');
-            i.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
-          });
-          if (!isOpen) {
-            item.classList.add('open');
-            btn.setAttribute('aria-expanded', 'true');
-          }
-        });
-      });
-    })();
-
-  </script>
-
 </body>
 </html>
